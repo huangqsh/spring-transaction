@@ -6,12 +6,16 @@ import org.huangqsh.transaction.dao.IUserDao;
 import org.huangqsh.transaction.entity.UserEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
 	@Resource
 	private IUserDao userDao;
+	
+	@Resource
+	private UserFactory userFactory;
 	
 	@Transactional()
 	public void addUser(UserEntity userEntity) {
@@ -29,10 +33,18 @@ public class UserService {
 		throw new RuntimeException("抛出异常");
 	}
 	
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void deleteById(int id) {
 		userDao.deleteUserById(id);
+		try {
+			userFactory.deleteUserById(id+1);
+		} catch (Exception e) {
+			System.out.println("捕获到异常");
+		}
+			
 	}
 	
+
 	//设置事物隔离级别为READ_UNCOMMITTED，即可读未提交事物，这会导致脏的，
 	@Transactional(isolation=Isolation.READ_UNCOMMITTED)
 	public UserEntity getUserById(int id) {

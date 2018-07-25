@@ -38,7 +38,7 @@ public class SpringDemoTest {
 	//测试传播属性
 	@Test
 	public void testPropagation() {
-
+		userService.deleteById(2);
 	}
 	
 }
