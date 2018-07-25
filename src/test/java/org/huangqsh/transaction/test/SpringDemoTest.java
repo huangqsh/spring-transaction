@@ -15,8 +15,9 @@ public class SpringDemoTest {
 	@Resource
 	private UserService userService;
 	
+	//测试隔离级别
 	@Test
-	public void testadd() {
+	public void testIsolation() {
 		Thread thread = new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -33,15 +34,11 @@ public class SpringDemoTest {
 		UserEntity userEntity = new UserEntity(2, "悟空", "111");
 		userService.addUser(userEntity);
 	}
-
+	
+	//测试传播属性
 	@Test
-	public void testdelete() {
-		userService.deleteById(2);
+	public void testPropagation() {
+
 	}
 	
-	@Test
-	public void testget() {
-		UserEntity userEntity = userService.getUserById(2);;
-		System.out.println(userEntity.getUsername());
-	}
 }

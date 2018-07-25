@@ -24,13 +24,16 @@ public class UserService {
 			e.printStackTrace();
 		}
 		System.out.println("--------------  ---add抛出异常，事物回滚-------- -----------");
-		System.out.println(1/0);
+		// RuntimeException属于unchecked异常会触发事物回滚，但是checked异常是不会触发事物回滚的
+		// 以上只是默认情况，可以通过noRollbackFor和rollbackFor属性进行设置
+		throw new RuntimeException("抛出异常");
 	}
 	
 	public void deleteById(int id) {
 		userDao.deleteUserById(id);
 	}
 	
+	//设置事物隔离级别为READ_UNCOMMITTED，即可读未提交事物，这会导致脏的，
 	@Transactional(isolation=Isolation.READ_UNCOMMITTED)
 	public UserEntity getUserById(int id) {
 		return userDao.getUserById(id);
